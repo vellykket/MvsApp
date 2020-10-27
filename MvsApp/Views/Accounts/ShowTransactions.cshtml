@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MvsApplication.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="ShowTransactions">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SenderAccountId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceiverAccountId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Accounts)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SenderAccountId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceiverAccountId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Accounts.AccountId)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

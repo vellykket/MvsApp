@@ -1,0 +1,17 @@
+version: '3'
+services:
+  ms-sql-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Password2020"
+      MSSQL_PID: Express
+    ports:
+    - "1433:1433"
+  mvs-app:
+    build: .
+    environment:
+      DBServer: "ms-sql-server"
+      DBPassword: "Password2020"
+    ports:
+    - "8080:80"

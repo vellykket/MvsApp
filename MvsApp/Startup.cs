@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MvsApp.Models;
 using MvsApplication.Models;
 
 namespace MvsApp
@@ -26,14 +27,26 @@ namespace MvsApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var server = Configuration["DBServer"] ?? "localhost";
+            var port = Configuration["DBPort"] ?? "1433";
+            var user = Configuration["DBUser"] ?? "SA";
+            var password = Configuration["DBPassword"] ?? "Password2020";
+            var database = Configuration["Database"] ?? "MvsApp";
+            
+            services.AddDbContext<MvsAppContext>(options =>
+                options.UseSqlServer($"" +
+                                     $"Server={server},{port};" +
+                                     $"Initial Catalog={database};" +
+                                     $"User ID ={user};" +
+                                     $"Password={password}"));
+            
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Users/Login");
                 });
+            
             services.AddControllersWithViews();
-            services.AddDbContext<MvsAppContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MvsAppContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +76,7 @@ namespace MvsApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            PrepDb.PrepPopulation(app);
         }
     }
 }
